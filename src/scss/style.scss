@@ -251,6 +251,10 @@ body {
       &>*:not(:last-child) {
          @include adaptiveValue("margin-bottom", 16, 12);
       }
+      &>* {
+         @extend %animateTwo;
+         transform: translate(-30px, 0);
+      }
    }
    // .content-main-slider__title
    &__title {
@@ -274,6 +278,8 @@ body {
       @include adaptiveValue("padding-bottom", 24, 12);
       @include adaptiveValue("padding-left", 54, 27);
       @include adaptiveValue("padding-right", 54, 27);
+      transform: translate(-30px, 0);
+      transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s, color 0.3s ease 0s, background-color 0.3s ease 0s, border 0.3s ease 0s;
    }
 }
 .slider-main {
@@ -407,6 +413,9 @@ body {
       justify-content: space-between;
       row-gap: rem(15);
       @include adaptiveValue("column-gap", 30, 20, 0, 991.98);
+      &>* {
+         @extend %animateTwo;
+      }
    }
    // .advantages__item
    &__item {
@@ -468,7 +477,7 @@ body {
    }
    // .products__item
    &__item {
-      transition: all 0.6s ease 0s;
+      transition: all 0.8s ease 0s;
       &:nth-child(n + 5) {
 			transform: translate(0, 0);
 			opacity: 1;
@@ -481,6 +490,9 @@ body {
 			visibility: hidden;
 			position: absolute;
 		}
+      &_originally {
+         @extend %animate;
+      }
    }
    // .products__footer
    &__footer {
@@ -701,6 +713,10 @@ body {
       &>*:not(:last-child) {
          margin-bottom: rem(8);
       }
+      &>* {
+         @extend %animateTwo;
+         transform: translate(rem(-30), 0);
+      }
    }
    // .rooms__title
    &__title {
@@ -712,6 +728,8 @@ body {
    // .rooms__button
    &__button {
       padding: rem(12) rem(40);
+      transform: translate(rem(-30), 0);
+      transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s, color 0.3s ease 0s, background-color 0.3s ease 0s, border 0.3s ease 0s;
    }
    // .rooms__wrapper
    &__wrapper {
@@ -1019,6 +1037,9 @@ body {
    &__content-top {
       &>*:not(:last-child) {
          margin-bottom: rem(8);
+      }
+      &>* {
+         @extend %animateTwo;
       }
    }
    // .furniture__label

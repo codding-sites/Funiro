@@ -1,5 +1,30 @@
-// Заголовки, загальні БЕМ блоки та інше...
-
+%animate {
+   transform: translate(0, rem(-30));
+   opacity: 0;
+   transition: opacity 0.8s ease 0s, transform 0.8s ease 0s;
+   &._watcher-view {
+      transform: translate(0, 0);
+      opacity: 1;
+   }
+}
+%animateTwo {
+   transform: translate(0, rem(-30));
+   opacity: 0;
+   &._watcher-view {
+      transform: translate(0, 0);
+      opacity: 1;
+      @for $var from 1 to 50 {
+         $delay: $var * 0.1;
+         &:nth-child(#{$var}) {
+            @if $var == 1 {
+               transition: all 0.8s ease 0s;
+            } @else {
+               transition: all 0.8s ease #{($delay - 0.1) + s};
+            }
+         }
+      }
+   }
+}
 //_flyImage========================================================================================================================================================
 ._flyImage-ibg {
    opacity: 1;
@@ -15,6 +40,7 @@
    font-weight: 700;
    line-height: math.div(48, 40);
    color: $mainColorTwo;
+   @extend %animate;
    // .title_left
    &_left {
       text-align-last: left;

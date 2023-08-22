@@ -1,5 +1,7 @@
 //====================================================================================================
 .footer {
+   @extend %animate;
+   transform: translate(0, rem(30));
    // .footer__container
    &__container {
    }
