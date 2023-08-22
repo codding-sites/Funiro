@@ -1,0 +1,210 @@
+{
+   "products": [
+      {
+         "id": 1,
+         "url": "#",
+         "title": "Syltherine",
+         "text": "Stylish cafe chair",
+         "labels": [
+            {
+               "type": "sale",
+               "value": "-50%"
+            },
+            {
+               "type": "new",
+               "value": "New"
+            }
+         ],
+         "image": "01.jpg",
+         "price": "Rp 2.500.000",
+         "priceOld": "Rp 3.500.000",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 2,
+         "url": "#",
+         "title": "Respira",
+         "text": "Minimalist fan",
+         "labels": [
+            {
+               "type": "new",
+               "value": "New"
+            }
+         ],
+         "image": "02.jpg",
+         "price": "Rp 500.000",
+         "priceOld": "",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 3,
+         "url": "#",
+         "title": "Leviosa",
+         "text": "Stylish cafe chair",
+         "labels": [
+            {
+               "type": "sale",
+               "value": "-50%"
+            }
+         ],
+         "image": "03.jpg",
+         "price": "Rp 2.500.000",
+         "priceOld": "",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 4,
+         "url": "#",
+         "title": "Lolito",
+         "text": "Luxury big sofa",
+         "labels": [
+            {
+               "type": "sale",
+               "value": "-50%"
+            }
+         ],
+         "image": "04.jpg",
+         "price": "Rp 7.000.000",
+         "priceOld": "Rp 14.000.000",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 5,
+         "url": "#",
+         "title": "Grifo",
+         "text": "Night lamp",
+         "labels": "",
+         "image": "05.jpg",
+         "price": "Rp 1.500.000",
+         "priceOld": "",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 6,
+         "url": "#",
+         "title": "Muggo",
+         "text": "Small mug",
+         "labels": [
+            {
+               "type": "sale",
+               "value": "-50%"
+            },
+            {
+               "type": "new",
+               "value": "New"
+            }
+         ],
+         "image": "06.jpg",
+         "price": "Rp 1.500.000",
+         "priceOld": "Rp 2.500.000",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 7,
+         "url": "#",
+         "title": "Pingky",
+         "text": "Cute bed set",
+         "labels": [
+            {
+               "type": "sale",
+               "value": "-50%"
+            }
+         ],
+         "image": "07.jpg",
+         "price": "Rp 7.000.000",
+         "priceOld": "Rp 14.500.000",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 8,
+         "url": "#",
+         "title": "Potty",
+         "text": "Minimalist flower pot",
+         "labels": [
+            {
+               "type": "new",
+               "value": "New"
+            }
+         ],
+         "image": "08.jpg",
+         "price": "Rp 500.000",
+         "priceOld": "",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 9,
+         "url": "#",
+         "title": "Grifo",
+         "text": "Night lamp",
+         "labels": "",
+         "image": "05.jpg",
+         "price": "Rp 1.500.000",
+         "priceOld": "",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 10,
+         "url": "#",
+         "title": "Muggo",
+         "text": "Small mug",
+         "labels": [
+            {
+               "type": "sale",
+               "value": "-50%"
+            },
+            {
+               "type": "new",
+               "value": "New"
+            }
+         ],
+         "image": "06.jpg",
+         "price": "Rp 1.500.000",
+         "priceOld": "Rp 2.500.000",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 11,
+         "url": "#",
+         "title": "Pingky",
+         "text": "Cute bed set",
+         "labels": [
+            {
+               "type": "sale",
+               "value": "-50%"
+            }
+         ],
+         "image": "07.jpg",
+         "price": "Rp 7.000.000",
+         "priceOld": "Rp 14.500.000",
+         "shareUrl": "",
+         "likeUrl": ""
+      },
+      {
+         "id": 12,
+         "url": "#",
+         "title": "Potty",
+         "text": "Minimalist flower pot",
+         "labels": [
+            {
+               "type": "new",
+               "value": "New"
+            }
+         ],
+         "image": "08.jpg",
+         "price": "Rp 500.000",
+         "priceOld": "",
+         "shareUrl": "",
+         "likeUrl": ""
+      }
+   ]
+}

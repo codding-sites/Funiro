@@ -1,0 +1,1125 @@
+@use "sass:math";
+
+// Підключення міксинів ===========================================================================================================================================================================================================================================================================
+@import "base/mixins";
+
+// Підключення шрифтів ===========================================================================================================================================================================================================================================================================
+//&display=swap - додати при підключенні через плагін
+
+
+// Підключити, якщо є локальні файли шрифтів
+@import "fonts/fonts";
+
+// Підключення іконкових шрифтів ==============================================================================================================================================================================================================================================================================
+// Підключити, якщо є файл іконкового шрифту
+@import "fonts/icons";
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// Налаштування шаблону ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// За замовчуванням шрифт ==============================================================================================================================================================================================================================================================================
+$fontFamily: "Gilroy";
+$fontSize: rem(16); // де 14(px) - розмір шрифту за замовчуванням з макету
+
+// Основні кольори
+$mainColor: #898989; // Колір шрифту за замовчуванням
+$mainColorTwo: #3a3a3a; // Колір шрифту за замовчуванням
+$mainColorThree: #616161; // Колір шрифту за замовчуванням
+$blackColor: #000;
+$grayColor: #f4f5f7;
+$darkGrayColor: #B0B0B0;
+$blacGrayColor: #333;
+$whiteColor: #fff;
+$orangeColor: #e89f71;
+$lightGrayColor: #D8D8D8;
+$shadeOrangeColor: #fcf8f3;
+$shadeOrangeColorTwo: #f9f1e7;
+$shadowDarkColor: rgba(97, 97, 97, 0.10);
+$shadowLightColor: rgba(255, 255, 255, 0.72);
+$redColor: #e97171;
+$greenColor: #2ec1ac;
+$filter: blur(rem(15.5));
+$filterTwo: blur(rem(20));
+$darkBlueColor: #262F56;
+
+// Палітра кольорів
+// @import "base/colors-palette";
+
+// Налаштування адаптивної сітки ===============================================================================================================================================================================================================================================================================================
+
+// Мінімальна ширина сторінки
+$minWidth: 320;
+// Ширина полотна (макету)
+$maxWidth: 1440;
+// Ширина обмежуючого контейнера (0 = немає обмеження)
+$maxWidthContainer: 1240;
+// Загальний відступ у контейнера
+// (30 = по 15px ліворуч і праворуч, 0 = немає відступу)
+$containerPadding: 30;
+
+// Ширина спрацьовування першого брейкпоінту
+$containerWidth: $maxWidthContainer + $containerPadding;
+
+// Брейк-поїнти
+$pc: em($containerWidth); // ПК, ноутбуки, деякі планшети у горизонтальному положенні
+$tablet: em(991.98); // Планшети, деякі телефони в горизонтальному положенні
+$mobile: em(767.98); // Телефони L
+$mobileSmall: em(479.98); // Телефони S
+
+// Тип адаптива:
+// 1 = чуйність (у контейнера немає брейкпоінтів),
+// 2 = по брейк-поїнт (контейнер змінює свою ширину по брейк-поїнт)
+$responsiveType: 1;
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// Обнулення ============================================================================================================================================================================================== =============================================================================================== ===============================================================================================
+@import "base/null";
+
+// Стилі тега BODY ============================================================================================================================================================================================================================================================================================================================================================================================
+body {
+	font-weight: 600;
+	line-height: math.div(24, 16);
+	// Скролл заблоковано
+	.lock & {
+		overflow: hidden;
+		touch-action: none;
+		overscroll-behavior: none;
+	} 
+	.lock-cart & {
+		overflow: hidden;
+		touch-action: none;
+		overscroll-behavior: none;
+	}
+	// Сайт завантажений
+	.loaded & {
+	}
+}
+// Оболонка wrapper ============================================================================================================================================================================================================================================================================================================================================================================================================================================
+.wrapper {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	@supports (overflow: clip) {
+		overflow: clip;
+	}
+	// Притискаємо footer
+	> main {
+		flex: 1 1 auto;
+	}
+	// Фікс для слайдерів
+	> * {
+		min-width: 0;
+	}
+}
+// Обмежуючий контейнер ======================================================================================================================================================================================================================
+/*
+(i) Стилі будуть застосовуватись до
+всіх класів, що містять *__container
+Наприклад header__container, main__container і т.п.
+Сніппет (HTML): cnt
+*/
+@if ($responsiveType==1) {
+	// Чуйна
+	[class*="__container"] {
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+			margin: 0 auto;
+		}
+		@if ($containerPadding>0) {
+			@if ($maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			} @else {
+				@include adaptiveValue("padding-left", math.div($containerPadding, 2), 15);
+				@include adaptiveValue("padding-right", math.div($containerPadding, 2), 15);
+			}
+		}
+	}
+} @else {
+	// Брейк-поїнтами
+	[class*="__container"] {
+		margin: 0 auto;
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+		} @else {
+			@if ($containerPadding>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+		@media (max-width: $pc) {
+			max-width: rem(970);
+		}
+		@media (max-width: $tablet) {
+			max-width: rem(750);
+		}
+		@media (max-width: $mobile) {
+			max-width: none;
+			@if ($containerPadding>0 and $maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+	}
+}
+
+// Підключення базових стилів, шаблонів (заготівель) та допоміжних класів
+// Для підключення/вимкнення конкретних стилів дивись base.scss
+@import "base";
+
+// Підключення стилів загальних елементів проекту
+@import "common";
+
+// Підключення стилів окремих блоків
+@import "header";
+@import "footer";
+
+// Підключення стилів окремих сторінок
+@import "home";
+
+//Main-Slider====================================================================================================
+.main-slider {
+   @include adaptiveValue("padding-top", 141, 60);
+   @include adaptiveValue("padding-bottom", 44, 25);
+   background-color: $shadeOrangeColor;
+   position: relative;
+   &::before{
+      content:'';
+      position: absolute;
+      width: 100vw;
+      height: 100%;
+      top: 0;
+      right: percent(376,1240);
+      background-color: $shadeOrangeColorTwo;
+   }
+   // .main-slider__container
+   &__container {
+      position: relative;
+      z-index: 2;
+   }
+   // .main-slider__body
+   &__body {
+      display: flex;
+      @media (max-width: $mobile){
+         flex-direction: column;
+      }
+   }
+   // .main-slider__content
+   &__content {
+      flex: 0 0 percent(494, 1240);
+   }
+   // .main-slider__body-wrraper
+   &__wrraper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      flex: 1 1 auto;
+      min-width: 0;
+      row-gap: rem(20);
+      @media (min-width: $mobile){
+         @include adaptiveValue("padding-left", 32, 20, 0, $containerWidth, 991.98);
+         align-self: flex-end;
+      }
+      @media (max-width: $mobile){
+         align-items: stretch;
+         flex-direction: column-reverse;
+         row-gap: rem(35);
+      }
+   }
+   // .main-slider__slider
+   &__slider {
+   }
+}
+.content-main-slider {
+   align-self: flex-start;
+   @include adaptiveValue("padding", 60, 15, 0, $containerWidth, 991.98);
+   position: relative;
+   z-index: 5;
+   background-color: $shadowLightColor;
+   backdrop-filter: $filter;
+   display: flex;
+   flex-direction: column;
+   &>*:not(:last-child) {
+      @include adaptiveValue("margin-bottom", 48, 15);
+   }
+   @media (max-width: $mobile){
+      margin: 0 rem(-15);
+   }
+   // .content-main-slider__body
+   &__body {
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 16, 12);
+      }
+   }
+   // .content-main-slider__title
+   &__title {
+      @include adaptiveValue("font-size", 56, 24, 0, $containerWidth, 479.98);
+      font-weight: 700;
+      line-height: math.div(67, 56);
+      color: $mainColorTwo;
+   }
+   // .content-main-slider__text
+   &__text {
+      @include adaptiveValue("font-size", 20, 16, 0, $containerWidth, 767.98);
+      line-height: math.div(30, 20);
+   }
+   // .content-main-slider__button
+   &__button {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content:center;align-items: center;
+      font-size: rem(20);
+      @include adaptiveValue("padding-top", 24, 12);
+      @include adaptiveValue("padding-bottom", 24, 12);
+      @include adaptiveValue("padding-left", 54, 27);
+      @include adaptiveValue("padding-right", 54, 27);
+   }
+}
+.slider-main {
+   overflow: visible !important;
+   @media (min-width: $mobile){
+      @include adaptiveValue("width", 934, 290);
+   }
+   @media (max-width: $mobile){
+      margin: 0 rem(-15);
+   }
+   // .slider-main__controls
+   &__controls {
+   }
+   // .slider-main__wrapper
+   &__wrapper {
+   }
+   // .slider-main__slide
+   &__slide {
+      position: relative;
+   }
+   // .slider-main__image-ibg
+   &__image-ibg {
+      padding-bottom: 59.208%;
+   }
+   // .slider-main__content
+   &__content {
+      @include adaptiveValue("padding", 24, 15, 0, $containerWidth, 767.98);
+      background-color: $shadowLightColor;
+      backdrop-filter: $filter;
+      transition: all 0.3s ease 0s;
+      display: block;
+      @media (min-width: $mobile){
+         overflow: auto;
+         @include adaptiveValue("max-height", 160, 135, 0, $containerWidth, 767.98);
+         @include adaptiveValue("min-width", 294, 230, 0, $containerWidth, 767.98);
+         @include adaptiveValue("max-width", 300, 230, 0, $containerWidth, 767.98);
+         position: absolute;
+         z-index: 2;
+         @include adaptiveValue("bottom", 40, 20, 0, $containerWidth, 767.98);
+         @include adaptiveValue("right", 40, 20, 0, $containerWidth, 767.98);
+      }
+      @media (any-hover: hover){
+         &:hover{
+            background-color: $orangeColor;
+            .slider-main__title,.slider-main__text,.slider-main__price {
+               color: $whiteColor;
+               &::before{
+                  color: $whiteColor;
+               }
+            }
+         }
+      }
+      &>*:not(:last-child) {
+         margin-bottom: rem(8);
+      }
+   }
+   // .slider-main__content-body
+   &__content-body {
+      &>*:not(:last-child) {
+         margin-bottom: rem(4);
+      }
+   }
+   // .slider-main__title
+   &__title {
+      @include adaptiveValue("font-size", 28, 20);
+      font-weight: 600;
+      line-height: math.div(33, 28);
+      color: $mainColorTwo;
+      transition: all 0.3s ease 0s;
+   }
+   // .slider-main__text
+   &__text {
+      color: $mainColorThree;
+      transition: all 0.3s ease 0s;
+   }
+   // .slider-main__price
+   &__price {
+      @include adaptiveValue("font-size", 20, 18);
+      line-height: math.div(30, 20);
+      color: $mainColorTwo;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row-reverse;
+      transition: all 0.3s ease 0s;
+      column-gap: rem(10);
+      &::before{
+         color: $mainColorTwo;
+         font-weight: 600;
+         transition: all 0.3s ease 0s;
+      }
+   }
+}
+.controls-slider-main {
+   position: relative;
+   width: 100%;
+   align-self: flex-start;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   column-gap: rem(20);
+   // .controls-slider-main__dotts
+   &__dotts {
+      flex: 1 1 auto;
+      @media (max-width: $mobile){
+         justify-content: center;
+         margin: 0 auto;
+         @include adaptiveValue("max-width", 580, 150, 0, 767.98);
+      }
+   }
+   // .controls-slider-main__arrows
+   &__arrows {
+      @media (max-width: $mobile){
+         position: absolute;
+         width: 100%;
+         left: 0;
+         z-index: 2;
+         justify-content: space-between;
+      }
+   }
+}
+//Advantages====================================================================================================
+.advantages {
+   @include adaptiveValue("padding-top", 44, 25);
+   @include adaptiveValue("padding-bottom", 44, 25);
+   // .advantages__container
+   &__container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      row-gap: rem(15);
+      @include adaptiveValue("column-gap", 30, 20, 0, 991.98);
+   }
+   // .advantages__item
+   &__item {
+      display: flex;
+      @include adaptiveValue("column-gap", 24, 15, 0, $containerWidth, 991.98);
+      @media (max-width: $mobile){
+         min-width: rem(290);
+      }
+   }
+   // .advantages__icon
+   &__icon {
+      padding-top: rem(12);
+      align-self: flex-start;
+      flex: 0 0 auto;
+      width: rem(40);
+      height: rem(40);
+      display: flex;
+      justify-content:center;align-items: center;
+      img {
+         max-width: 100%;
+      }
+   }
+   // .advantages__content
+   &__content {
+      display: flex;
+      flex-direction: column;
+      row-gap: rem(2);
+   }
+   // .__title
+   &__title {
+      font-size: rem(18);
+      font-weight: 600;
+      line-height: math.div(27, 18);
+      color: $mainColorTwo;
+   }
+   // .advantages__sub-title
+   &__sub-title {
+   }
+}
+//Products========================================================================================================================================================
+.products {
+   @include adaptiveValue("padding-top", 44, 25);
+   @include adaptiveValue("padding-bottom", 44, 25);
+   // .products__container
+   &__container {
+      display: flex;
+      flex-direction: column;
+      @include adaptiveValue("row-gap", 32, 20);
+   }
+   // .products__title
+   &__title {
+      align-self: center;
+   }
+   // .products__items
+   &__items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(rem(285), 1fr));
+      @include adaptiveValue("gap", 32, 20, 0, $containerWidth, 767.98);
+   }
+   // .products__item
+   &__item {
+      transition: all 0.6s ease 0s;
+      &:nth-child(n + 5) {
+			transform: translate(0, 0);
+			opacity: 1;
+			visibility: visible;
+			position: relative;
+		}
+		&.is-visible {
+			transform: translate(0, -20px);
+			opacity: 0;
+			visibility: hidden;
+			position: absolute;
+		}
+   }
+   // .products__footer
+   &__footer {
+      display: flex;
+      justify-content:center;align-items: center;
+   }
+   // .products__more
+   &__more {
+      align-self: center;
+      padding: rem(12) rem(82);
+      @include adaptiveValue("padding-right", 82, 30);
+      @include adaptiveValue("padding-left", 82, 30);
+      &._hold {
+         opacity: 0.2;
+         cursor: default;
+      }
+   }
+}
+.item-products {
+   height: 100%;
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   background-color: $grayColor;
+   @media (any-hover: hover){
+      &:hover{
+         .item-products__actions{
+            opacity: 1;
+            visibility: visible;
+         }
+      }
+   }
+   // .item-products__labels
+   &__labels {
+      position: absolute;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      @include adaptiveValue("right", 24, 10);
+      @include adaptiveValue("top", 24, 10);
+      gap: rem(10);
+   }
+   // .item-products__label
+   &__label {
+      flex: 0 0 auto;
+      width: rem(48);
+      height: rem(48);
+      border-radius: 50%;
+      display: flex;
+      justify-content:center;align-items: center;
+      color: $whiteColor;
+      // .item-products__label_sale
+      &_sale {
+         background-color: $redColor;
+      }
+      // .item-products__label_new
+      &_new {
+         background-color: $greenColor;
+      }
+   }
+   // .item-products__image-ibg
+   &__image-ibg {
+      padding-bottom: percent(301,285);
+   }
+   // .item-products__body
+   &__body {
+      flex: 1 1 auto;
+      padding: rem(16);
+      display: flex;
+      flex-direction: column;
+      &>*:not(:last-child) {
+         margin-bottom: rem(8);
+      }
+   }
+   // .item-products__content
+   &__content {
+      flex: 1 1 100%;
+      &>*:not(:last-child) {
+         margin-bottom: rem(8);
+      }
+   }
+   // .item-products__title
+   &__title {
+      @include adaptiveValue("font-size", 24, 20);
+      font-weight: 600;
+      line-height: math.div(28, 24);
+      color: $mainColorTwo;
+   }
+   // .item-products__text
+   &__text {
+   }
+   // .item-products__prices
+   &__prices {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: rem(16);
+   }
+   // .item-products__price
+   &__price {
+      @include adaptiveValue("font-size", 20, 18);
+      font-weight: 600;
+      line-height: math.div(28, 24);
+      color: $mainColorTwo;
+      // .item-products__price_old
+      &_old {
+         font-size: rem(16);
+         font-weight: 400;
+         line-height: math.div(24, 16);
+         text-decoration-line: line-through;
+         color: $darkGrayColor;
+      }
+   }
+   // .item-products__actions
+   &__actions {
+      @media (any-hover: none){
+         padding-top: rem(12);
+         .actions-item-products__button {
+            border: rem(1) solid $orangeColor;
+         }
+         .actions-item-products__link {
+            color: $orangeColor;
+            &::before{
+               color: $orangeColor;
+            }
+         }
+      }
+      @media (any-hover: hover){
+         padding: rem(20) rem(40);
+         opacity: 0;
+         visibility: hidden;
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         display: flex;
+         justify-content:center;align-items: center;
+         background-color: rgba(58, 58, 58, 0.7);
+         z-index: 3;
+         transition: all 0.3s ease 0s;
+      }
+   }
+}
+.actions-item-products {
+   // .actions-item-products__body
+   &__body {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: rem(24);
+      justify-content: space-between;
+   }
+   // .actions-item-products__button
+   &__button {
+      padding: rem(12) rem(20);
+      display: flex;
+      justify-content: center;
+      flex: 1 1 100%;
+      border: rem(1) solid $whiteColor;
+      &._hold {
+         opacity: 0.2;
+         cursor: default;
+      }
+   }
+   // .actions-item-products__link
+   &__link {
+      display: flex;
+      column-gap: rem(8);
+      align-items: center;
+      color: $whiteColor;
+      font-weight: 600;
+      transition: all 0.3s ease 0s;
+      &::before{
+         color: $whiteColor;
+         font-size: rem(24);
+         transition: all 0.3s ease 0s;
+      }
+      @media (any-hover: hover){
+         &:hover{
+            color: $orangeColor;
+            &::before{
+               color: $orangeColor;
+            }
+         }
+      }
+   }
+}
+//Rooms========================================================================================================================================================
+.rooms {
+   @include adaptiveValue("padding-top", 120, 25);
+   @include adaptiveValue("padding-bottom", 44, 25);
+   background-color: $shadeOrangeColor;
+   // .rooms__container
+   &__container {
+      display: flex;
+      @include adaptiveValue("column-gap", 80, 30, 0, $containerWidth, 767.98);
+      @media (max-width: $tablet){
+         flex-direction: column;
+      }
+   }
+   // .rooms__body
+   &__body {
+      position: relative;
+      z-index: 5;
+      flex: 0 0 percent(465, 1240);
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 24, 15);
+      }
+      @media (min-width: $tablet){
+         align-self: center;
+      }
+      @media (max-width: $tablet){
+         margin-bottom: rem(20);
+      }
+   }
+   // .rooms__content
+   &__content {
+      &>*:not(:last-child) {
+         margin-bottom: rem(8);
+      }
+   }
+   // .rooms__title
+   &__title {
+      text-align: left;
+   }
+   // .rooms__text
+   &__text {
+   }
+   // .rooms__button
+   &__button {
+      padding: rem(12) rem(40);
+   }
+   // .rooms__wrapper
+   &__wrapper {
+      flex: 1 1 auto;
+      min-width: rem(0);
+      align-self: flex-start;
+      width: 100%;
+   }
+   // .rooms__slider
+   &__slider {
+   }
+}
+.rooms-slider {
+   position: relative;
+   overflow: visible !important;
+   &::before{
+      content:'';
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100vw;
+      left: 0;
+      background-color: $shadeOrangeColor;
+      z-index: 2;
+      transform: translate(-100%, 0);
+   }
+   @media (max-width: em(330)){
+      margin: 0 rem(-15) !important;
+   }
+   // .rooms-slider__wrapper
+   &__wrapper {
+      &:not(:last-child) {
+         margin-bottom: rem(20);
+      }
+   }
+   // .rooms-slider__slide
+   &__slide {
+      position: relative;
+      overflow: hidden;
+      @include adaptiveValue("height", 585, 400);
+      @include adaptiveValue("width", 404, 290);
+      &.swiper-slide-active {
+         .rooms-slider__image-ibg {
+            height: 100%;
+            width: 100%;
+         }
+         .rooms-slider__content {
+            pointer-events: auto;
+         }
+      }
+      @media (max-width: em(330)){
+         width: 100%;
+      }
+   }
+   // .rooms-slider__image-ibg
+   &__image-ibg {
+      height: 83%;
+      width: 92.1%;
+      transition: all 0.8s ease 0s;
+   }
+   // .rooms-slider__content-wrapper
+   &__content-wrapper {
+      @include adaptiveValue("left", 24, 15, 0, $containerWidth, 991.98);
+      @include adaptiveValue("bottom", 24, 15, 0, $containerWidth, 991.98);
+      position: absolute;
+      pointer-events: none;
+      display: flex;
+   }
+   // .rooms-slider__content
+   &__content {
+      @include adaptiveValue("padding", 32, 15, 0, $containerWidth, 991.98);
+      @include adaptiveValue("max-width", 235, 170);
+      @include adaptiveValue("max-height", 130, 90);
+      overflow: auto;
+      background-color: $shadowLightColor;
+      backdrop-filter: $filter;
+      transition: all 0.3s ease 0s;
+      &>*:not(:last-child) {
+         margin-bottom: rem(8);
+      }
+   }
+   // .rooms-slider__content-link
+   &__content-link {
+      align-self: flex-end;
+      &::before {
+         width: rem(48);
+         height: rem(48);
+         background-color: $orangeColor;
+         color: $whiteColor;
+         font-weight: 600;
+         font-size: rem(18);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         transition: all 0.3s ease 0s;
+         pointer-events: auto;
+         cursor: pointer;
+      }
+      @media (any-hover: hover){
+         &:hover{
+            &::before {
+               background-color: $shadeOrangeColorTwo;
+               color: $orangeColor;
+            }
+         }
+      }
+   }
+   // .rooms-slider__label
+   &__label {
+   }
+   // .rooms-slider__content-title
+   &__content-title {
+      @include adaptiveValue("font-size", 28, 20);
+      font-weight: 600;
+      line-height: math.div(33, 28);
+      color: $mainColorTwo;
+      transition: all 0.3s ease 0s;
+   }
+   // .rooms-slider__arrows
+   &__arrows {
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+      width: 100%;
+      padding: rem(0) rem(5);
+      left: 0;
+      z-index: 5;
+      justify-content: space-between;
+      @media (min-width: calc($pc + rem(30))){
+         width: calc(100% + rem(40));
+         left: rem(-24);
+      }
+   }
+   // .rooms-slider__dotts
+   &__dotts {
+      position: relative;
+      z-index: 4;
+      @media (max-width: $mobile){
+         display: flex;
+         justify-content:center;align-items: center;
+      }
+      @media (min-width: $mobile){
+         position: absolute;
+         width: 100%;
+         @include adaptiveValue("bottom", 30, 15, 0, $containerWidth, 767.98);
+         left: rem(428);
+      }
+   }
+}
+.label-rooms-slider {
+   display: flex;
+   align-items: center;
+   justify-content: start;
+   column-gap: rem(8);
+   // .label-rooms-slider__number
+   &__number {
+      color: $mainColorThree;
+      transition: all 0.3s ease 0s;
+   }
+   // .label-rooms-slider__line
+   &__line {
+      &::before{
+         content:'';
+         display: block;
+         width: rem(27);
+         height: rem(1);
+         background-color: $mainColorThree;
+         transition: all 0.3s ease 0s;
+      }
+   }
+   // .label-rooms-slider__text
+   &__text {
+      color: $mainColorThree;
+      transition: all 0.3s ease 0s;
+   }
+}
+//========================================================================================================================================================
+.tips {
+   @include adaptiveValue("padding-top", 44, 25);
+   @include adaptiveValue("padding-bottom", 22, 12.5);
+   // .tips__container
+   &__container {
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 32, 10);
+      }
+   }
+   // .tips__title
+   &__title {
+   }
+   // .tips__slider-wrapper
+   &__slider-wrapper {
+      @include adaptiveValue("margin", -32, -15);
+   }
+   // .tips__slider
+   &__slider {
+      @include adaptiveValue("padding", 30, 15);
+   }
+   // .tips__wrapper
+   &__wrapper {
+      &:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 43, 10);
+      }
+   }
+   // .tips__slide
+   &__slide {
+      display: flex !important;
+      flex-direction: column;
+      transition: all 0.3s ease 0s !important;
+      @media (any-hover: hover){
+         &:hover{
+            box-shadow: 0 0 rem(32) rgba(97, 97, 97, 0.4);
+         }
+      }
+   }
+}
+.tips-slider {
+   position: relative;
+   // .tips-slider__image-ibg
+   &__image-ibg {
+      padding-bottom: percent(251,391);
+      overflow: hidden;
+      img {
+         transition: all 0.3s ease 0s;
+      }
+      @media (any-hover: hover){
+         &:hover{
+            img {
+               transform: scale(1.1);
+            }
+         }
+      }
+   }
+   // .tips-slider__content
+   &__content {
+      padding: rem(15);
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      align-items: flex-start;
+      &>*:not(:last-child) {
+         margin-bottom: rem(8);
+      }
+   }
+   // .tips-slider__title
+   &__title {
+      flex: 1 1 auto;
+      color: $mainColorTwo;
+      font-weight: 600;
+      @include adaptiveValue("font-size", 24, 18);
+      line-height: math.div(28, 24);
+      transition: all 0.3s ease 0s;
+      @media (any-hover: hover){
+         &:hover{
+            color: $orangeColor;
+         }
+      }
+   }
+   // .tips-slider__date
+   &__date {
+      font-size: rem(14);
+      line-height: math.div(21, 14);
+   }
+   // .tips-slider__actions
+   &__actions {
+      display: flex;
+      flex-direction: column;
+      row-gap: rem(15);
+   }
+   // .tips-slider__arrows
+   &__arrows {
+      @media (max-width: $mobileSmall){
+         justify-content: space-between;
+      }
+      @media (min-width: $mobileSmall){
+         position: absolute;
+         top: 50%;
+         transform: translate(0, -100%);
+         width: 100%;
+         padding: rem(0) rem(35);
+         left: 0;
+         z-index: 5;
+         justify-content: space-between;
+         @media (min-width: calc($pc + rem(50))){
+            padding: rem(0) rem(5);
+         }
+      }
+   }
+   // .tips-slider__dotts
+   &__dotts {
+      display: flex;
+      justify-content: center;
+   }
+}
+//Furniture========================================================================================================================================================
+.furniture {
+   @include adaptiveValue("padding-top", 22, 12.5);
+   @include adaptiveValue("padding-bottom", 87, 25);
+   // .furniture__cnt
+   &__cnt {
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 32, 15);
+      }
+   }
+   // .furniture__content-top
+   &__content-top {
+      &>*:not(:last-child) {
+         margin-bottom: rem(8);
+      }
+   }
+   // .furniture__label
+   &__label {
+      @include adaptiveValue("font-size", 20, 16);
+      font-weight: 600;
+      line-height: math.div(30, 20);
+      color: $mainColorThree;
+      text-align: center;
+   }
+   // .furniture__title
+   &__title {
+   }
+   // .furniture__body
+   &__body {
+      position: relative;
+      @media (any-hover: none){
+         overflow: auto;
+         -webkit-overflow-scrolling: touch;
+      }
+   }
+   // .furniture__items
+   &__items {
+      display: grid;
+      grid-template-columns: auto;
+      grid-auto-flow: column;
+      align-items: center;
+      //gap: rem(16);
+      @media (any-hover: hover){
+         justify-content: center;
+      }
+   }
+   // .furniture__column
+   &__column {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      //margin: rem(0) rem(8);
+      &:first-child {
+         justify-content: flex-end;
+      }
+      &>*:not(:last-child) {
+         margin-bottom: rem(16);
+      }
+      @media (any-hover: none){
+         &:first-child {
+            order: 3;
+         }
+         &:nth-child(2) {
+            order: 2;
+         }
+         &:last-child {
+            order: 1;
+         }
+      }
+   }
+   // .furniture__row
+   &__row {
+      display: inline-grid;
+      grid-template-columns: auto;
+      grid-auto-flow: column;
+      gap: rem(16);
+      padding: rem(0) rem(8);
+   }
+}
+.row-furniture {
+   // .row-furniture_left-top
+   &_left-top {
+      justify-content: end;
+      align-items: end;
+   }
+   // .row-furniture_left-bottom
+   &_left-bottom {
+      justify-content: end;
+      align-items: start;
+   }
+   // .row-furniture_center
+   &_center {
+      display: block;
+   }
+   // .row-furniture_right-top
+   &_right-top {
+      align-items: end;
+   }
+   // .row-furniture_right-bottom
+   &_right-bottom {
+      align-items: start;
+   }
+   // .row-furniture__item
+   &__item {
+      @media (any-hover: hover){
+         img {
+            transition: all 0.3s ease 0s;
+            filter: grayscale(1);
+         }
+         &:hover{
+            img {
+               filter: grayscale(0);
+            }
+         }
+      }
+   }
+}
+//========================================================================================================================================================
