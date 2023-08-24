@@ -155,10 +155,17 @@ body::after {
 	}
 	&__close {
 		display: flex;
+		align-self: end;
 		justify-content: end;
 		font-size: rem(20);
 		font-weight: 700;
 		color: $mainColorTwo;
+		transition: all 0.3s ease 0s;
+		@media (any-hover: hover){
+			&:hover{
+				color: $orangeColor;
+			}
+		}
 	}
 	// .cart-popup__title-text
 	&__title-text {

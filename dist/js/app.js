@@ -419,7 +419,6 @@
             this.options.init ? this.initPopups() : null;
         }
         initPopups() {
-            this.popupLogging(`Прокинувся`);
             this.eventsPopup();
         }
         eventsPopup() {
@@ -520,7 +519,6 @@
                             popup: this
                         }
                     }));
-                    this.popupLogging(`Відкрив попап`);
                 } else this.popupLogging(`Йой, такого попапу немає. Перевірте коректність введення. `);
             }
         }
@@ -555,7 +553,6 @@
             setTimeout((() => {
                 this._focusTrap();
             }), 50);
-            this.popupLogging(`Закрив попап`);
         }
         _getHash() {
             if (this.options.hashSettings.location) this.hash = this.targetOpen.selector.includes("#") ? this.targetOpen.selector : this.targetOpen.selector.replace(".", "#");
@@ -4417,7 +4414,6 @@
         }
         scrollWatcherConstructor(items) {
             if (items.length) {
-                this.scrollWatcherLogging(`Прокинувся, стежу за об'єктами (${items.length})...`);
                 let uniqParams = uniqArray(Array.from(items).map((function(item) {
                     return `${item.dataset.watchRoot ? item.dataset.watchRoot : null}|${item.dataset.watchMargin ? item.dataset.watchMargin : "0px"}|${item.dataset.watchThreshold ? item.dataset.watchThreshold : 0}`;
                 })));
@@ -4437,7 +4433,7 @@
                     let configWatcher = this.getScrollWatcherConfig(paramsWatch);
                     this.scrollWatcherInit(groupItems, configWatcher);
                 }));
-            } else this.scrollWatcherLogging("Сплю, немає об'єктів для стеження. ZzzZZzz");
+            }
         }
         getScrollWatcherConfig(paramsWatch) {
             let configWatcher = {};
@@ -4466,17 +4462,10 @@
             items.forEach((item => this.observer.observe(item)));
         }
         scrollWatcherIntersecting(entry, targetElement) {
-            if (entry.isIntersecting) {
-                !targetElement.classList.contains("_watcher-view") ? targetElement.classList.add("_watcher-view") : null;
-                this.scrollWatcherLogging(`Я бачу ${targetElement.classList}, додав клас _watcher-view`);
-            } else {
-                targetElement.classList.contains("_watcher-view") ? targetElement.classList.remove("_watcher-view") : null;
-                this.scrollWatcherLogging(`Я не бачу ${targetElement.classList}, прибрав клас _watcher-view`);
-            }
+            if (entry.isIntersecting) !targetElement.classList.contains("_watcher-view") ? targetElement.classList.add("_watcher-view") : null; else targetElement.classList.contains("_watcher-view") ? targetElement.classList.remove("_watcher-view") : null;
         }
         scrollWatcherOff(targetElement, observer) {
             observer.unobserve(targetElement);
-            this.scrollWatcherLogging(`Я перестав стежити за ${targetElement.classList}`);
         }
         scrollWatcherLogging(message) {
             this.config.logging ? FLS(`[Спостерігач]: ${message}`) : null;
@@ -6354,16 +6343,27 @@ PERFORMANCE OF THIS SOFTWARE.
                 document.querySelector(".cart-header").classList.remove("_active");
                 if (window.innerWidth < 768) bodyUnlockCart();
             }
-            const cartBody = document.querySelector(".cart-header__body");
-            function handleMouseEnter() {
-                bodyLock();
-            }
-            function handleMouseLeave() {
-                bodyUnlock();
-            }
-            if (!isMobile.any()) {
-                cartBody.addEventListener("mouseenter", handleMouseEnter);
-                cartBody.addEventListener("mouseleave", handleMouseLeave);
+            if (document.querySelector(".cart-header__body")) {
+                const cartBody = document.querySelector(".cart-header__body");
+                function handleMouseEnter() {
+                    bodyLock();
+                }
+                function handleMouseLeave() {
+                    if (!document.documentElement.classList.contains("popup-show")) bodyUnlock();
+                }
+                if (!isMobile.any()) {
+                    cartBody.addEventListener("mouseenter", handleMouseEnter);
+                    cartBody.addEventListener("mouseleave", handleMouseLeave);
+                }
+                if (document.querySelector(".cart-list__make-order-btn")) {
+                    const buttonOrder = document.querySelector(".cart-list__make-order-btn");
+                    buttonOrder.addEventListener("click", (() => {
+                        bodyUnlock();
+                        setTimeout((() => {
+                            modules_flsModules.popup.open("#cart-popup");
+                        }), 0);
+                    }));
+                }
             }
             if (e.target.classList.contains("actions-item-products__button")) {
                 let productId = e.target.closest(".item-products").dataset.pid;
@@ -6501,7 +6501,7 @@ PERFORMANCE OF THIS SOFTWARE.
                     productTemplatePrices += productTemplatePricesCurrent;
                     if (productOldPrice) productTemplatePrices += productTemplatePricesOld;
                     productTemplatePrices += productTemplatePricesEnd;
-                    let productTemplateActions = `\n   <div class="item-products__actions actions-item-products">\n      <div class="actions-item-products__body">\n         <button class="actions-item-products__button button button_white">Add to cart</button>\n         <button class="actions-item-products__link _icon-share">Share</button>\n         <button class="actions-item-products__link _icon-favorite">Like</button>\n      </div>\n   </div>\n`;
+                    let productTemplateActions = `\n   <div class="item-products__actions actions-item-products">\n      <div class="actions-item-products__body">\n         <button class="actions-item-products__button button button_originally button_white">Add to cart</button>\n         <button class="actions-item-products__link _icon-share">Share</button>\n         <button class="actions-item-products__link _icon-favorite">Like</button>\n      </div>\n   </div>\n`;
                     let productTemplateBody = "";
                     productTemplateBody += productTemplateBodyStart;
                     productTemplateBody += productTemplateContent;
@@ -6654,7 +6654,7 @@ PERFORMANCE OF THIS SOFTWARE.
                     currency: "IDR",
                     symbol: "Rp",
                     maximumFractionDigits: 0
-                })}</span></div><div class="cart-list__make-order"><button class="cart-list__make-order-btn button">Make order</button></div>`);
+                })}</span></div><div class="cart-list__make-order"><button class="cart-list__make-order-btn button button_originally">Make order</button></div>`);
                 if (cartList.querySelectorAll(".cart-list__item").length == 0) removeCart(productBtn);
             } else {
                 if (document.querySelector(".cart-list__total-price")) {
@@ -6666,7 +6666,7 @@ PERFORMANCE OF THIS SOFTWARE.
                     currency: "IDR",
                     symbol: "Rp",
                     maximumFractionDigits: 0
-                })}</span></div><div class="cart-list__make-order"><button data-popup="#cart-popup" class="cart-list__make-order-btn button">Make order</button></div>`);
+                })}</span></div><div class="cart-list__make-order"><button class="cart-list__make-order-btn button button_originally">Make order</button></div>`);
             }
         }
         function removeCart(productBtn, order = false) {
@@ -6728,7 +6728,6 @@ PERFORMANCE OF THIS SOFTWARE.
             }));
             const acceptOrder = document.querySelector(".cart-popup__button");
             acceptOrder.addEventListener("click", (function(e) {
-                console.log(cartProducts);
                 for (let i = 0; i < cartProducts.length; i++) cartProducts[i].remove();
                 removeCart(productBtn, true);
                 e.preventDefault();

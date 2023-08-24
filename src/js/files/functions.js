@@ -219,6 +219,43 @@ export let bodyLockCart = (delay = 0) => {
 		}, delay);
 	}
 }
+
+export let bodyLockStatusCartBody = true;
+
+export let bodyUnlockCartBody = (delay = 0) => {
+	let body = document.querySelector("body");
+	if (bodyLockStatusCartBody) {
+		let lock_padding = document.querySelectorAll("[data-lp]");
+		setTimeout(() => {
+			for (let index = 0; index < lock_padding.length; index++) {
+				const el = lock_padding[index];
+				el.style.paddingRight = '0px';
+			}
+			body.style.paddingRight = '0px';
+			document.documentElement.classList.remove("lock-cart-body");
+		}, delay);
+		bodyLockStatusCartBody = false;
+		setTimeout(function () {
+			bodyLockStatusCartBody = true;
+		}, delay);
+	}
+}
+export let bodyLockCartBody = (delay = 0) => {
+	let body = document.querySelector("body");
+	if (bodyLockStatusCartBody) {
+		let lock_padding = document.querySelectorAll("[data-lp]");
+		for (let index = 0; index < lock_padding.length; index++) {
+			const el = lock_padding[index];
+			el.style.paddingRight = window.innerWidth - document.querySelector('.wrapper').offsetWidth + 'px';
+		}
+		body.style.paddingRight = window.innerWidth - document.querySelector('.wrapper').offsetWidth + 'px';
+		document.documentElement.classList.add("lock-cart-body");
+		bodyLockStatusCartBody = false;
+		setTimeout(function () {
+			bodyLockStatusCartBody = true;
+		}, delay);
+	}
+}
 // Модуль роботи зі спойлерами =======================================================================================================================================================================================================================
 export function spollers() {
 	const spollersArray = document.querySelectorAll('[data-spollers]');

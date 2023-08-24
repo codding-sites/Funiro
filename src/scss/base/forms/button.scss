@@ -10,7 +10,7 @@
 	font-weight: 600;
 	text-align: center;
 	@extend %animate;
-	transition: opacity 0.8s ease 0s, transform 0.8s ease 0s, color 0.3s ease 0s, background-color 0.3s ease 0s, border 0.3s ease 0s;
+	transition: opacity 0.8s ease 0s, transform 0.8s ease 0s, color 0.3s ease 0s, background-color 0.3s ease 0s, border 0.3s ease 0s !important;
 	&_white {
 		background-color: $whiteColor;
 		color: $orangeColor;
@@ -21,6 +21,10 @@
 				border: rem(1) solid $whiteColor;
 			}
 		}
+	}
+	&_originally {
+		transform: translate(0, 0) !important;
+		opacity: 1 !important;
 	}
 	@media (any-hover: hover) {
 		&:hover {

@@ -1,5 +1,5 @@
 // Підключення функціоналу "Чертоги Фрілансера"
-import { isMobile, bodyLockToggleCart, bodyUnlockCart, bodyLockCart, bodyLock, bodyUnlock } from "./functions.js";
+import { isMobile, bodyLockToggleCart, bodyUnlockCart, bodyUnlockCartBody, bodyLockCartBody, bodyLock, bodyUnlock } from "./functions.js";
 // Підключення списку активних модулів
 import { flsModules } from "./modules.js";
 
@@ -57,18 +57,31 @@ window.onload = function () {
       }
 
       //LOCK/UNLOCK FOR CART-HEADER__BODY========================================================================================================================================================
-      const cartBody = document.querySelector('.cart-header__body');
-      function handleMouseEnter() {
-         bodyLock();
+      if (document.querySelector('.cart-header__body')) {
+         const cartBody = document.querySelector('.cart-header__body');
+         function handleMouseEnter() {
+            bodyLock();
+         }
+         function handleMouseLeave() {
+            if (!document.documentElement.classList.contains('popup-show')) {
+               bodyUnlock();
+            }
+         }
+         if (!isMobile.any()) {
+            cartBody.addEventListener('mouseenter', handleMouseEnter);
+            cartBody.addEventListener('mouseleave', handleMouseLeave);
+         }
+         if (document.querySelector('.cart-list__make-order-btn')) {
+            const buttonOrder = document.querySelector('.cart-list__make-order-btn');
+            buttonOrder.addEventListener('click', () => {
+               bodyUnlock();
+               setTimeout(() => {
+                  flsModules.popup.open('#cart-popup');
+               }, 0)
+            });
+         }
       }
-      function handleMouseLeave() {
-         bodyUnlock();
-      }
-      if (!isMobile.any()) {
-         cartBody.addEventListener('mouseenter', handleMouseEnter);
-         cartBody.addEventListener('mouseleave', handleMouseLeave);
-      }
-      
+
       //ITEM-PRODUCTS TO CART========================================================================================================================================================
       if (e.target.classList.contains('actions-item-products__button')) {
          let productId = e.target.closest('.item-products').dataset.pid;
@@ -245,7 +258,7 @@ window.onload = function () {
             let productTemplateActions = `
    <div class="item-products__actions actions-item-products">
       <div class="actions-item-products__body">
-         <button class="actions-item-products__button button button_white">Add to cart</button>
+         <button class="actions-item-products__button button button_originally button_white">Add to cart</button>
          <button class="actions-item-products__link _icon-share">Share</button>
          <button class="actions-item-products__link _icon-favorite">Like</button>
       </div>
@@ -462,7 +475,7 @@ window.onload = function () {
             document.querySelector('.cart-list__total-price').remove();
             document.querySelector('.cart-list__make-order').remove();
          }
-         cartWrapper.insertAdjacentHTML('beforeend', `<div class="cart-list__total-price">Total: <span>${totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', symbol: "Rp", maximumFractionDigits: 0, })}</span></div><div class="cart-list__make-order"><button class="cart-list__make-order-btn button">Make order</button></div>`);
+         cartWrapper.insertAdjacentHTML('beforeend', `<div class="cart-list__total-price">Total: <span>${totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', symbol: "Rp", maximumFractionDigits: 0, })}</span></div><div class="cart-list__make-order"><button class="cart-list__make-order-btn button button_originally">Make order</button></div>`);
          if (cartList.querySelectorAll('.cart-list__item').length == 0) {
             removeCart(productBtn);
          }
@@ -471,7 +484,7 @@ window.onload = function () {
             document.querySelector('.cart-list__total-price').remove();
             document.querySelector('.cart-list__make-order').remove();
          }
-         cartWrapper.insertAdjacentHTML('beforeend', `<div class="cart-list__total-price">Total: <span>${totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', symbol: "Rp", maximumFractionDigits: 0, })}</span></div><div class="cart-list__make-order"><button data-popup="#cart-popup" class="cart-list__make-order-btn button">Make order</button></div>`);
+         cartWrapper.insertAdjacentHTML('beforeend', `<div class="cart-list__total-price">Total: <span>${totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', symbol: "Rp", maximumFractionDigits: 0, })}</span></div><div class="cart-list__make-order"><button class="cart-list__make-order-btn button button_originally">Make order</button></div>`);
       }
    }
 
@@ -542,7 +555,6 @@ window.onload = function () {
       });
       const acceptOrder = document.querySelector('.cart-popup__button')
       acceptOrder.addEventListener('click', function (e) {
-         console.log(cartProducts)
          for (let i = 0; i < cartProducts.length; i++) {
             cartProducts[i].remove();
          }

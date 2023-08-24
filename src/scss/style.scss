@@ -93,6 +93,11 @@ body {
 		touch-action: none;
 		overscroll-behavior: none;
 	}
+   .lock-cart-body & {
+      overflow: hidden;
+      touch-action: none;
+      overscroll-behavior: none;
+   }
 	// Сайт завантажений
 	.loaded & {
 	}
